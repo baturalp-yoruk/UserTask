@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>deneme</artifactId>
+	<artifactId>usertask</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>deneme</name>
+	<name>usertask</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -19,6 +19,12 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>

@@ -1,12 +1,12 @@
 package com.example.usertask.service.impl;
 
 import com.example.usertask.controller.request.CreateProcessRequest;
+import com.example.usertask.controller.request.UpdateProcessRequest;
 import com.example.usertask.exception.UserNotFoundException;
-import com.example.usertask.model.converter.CreateProcessRequestConverter;
-import com.example.usertask.model.converter.ProcessConverter;
-import com.example.usertask.model.converter.TaskConverter;
+import com.example.usertask.model.converter.*;
 import com.example.usertask.model.dto.ProcessDto;
 import com.example.usertask.model.dto.TaskDto;
+import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.ProcessEntity;
 import com.example.usertask.exception.ProcessNotFoundException;
 import com.example.usertask.model.entity.TaskEntity;
@@ -24,7 +24,7 @@ import java.util.List;
 
 import static java.lang.String.valueOf;
 
-@Service("processServiceImpl")
+@Service
 public class ProcessServiceImpl implements ProcessService {
     @Autowired
     private ProcessRepository processRepository;
@@ -36,6 +36,12 @@ public class ProcessServiceImpl implements ProcessService {
     @Override
     public List<ProcessDto> processList() {
         List<ProcessEntity> processEntities = processRepository.findAll();
+
+        for(int i=0; i<processEntities.size(); i++){
+            if(processEntities.get(i).isDeleted())
+                processEntities.remove(i);
+        }
+
         return ProcessConverter.convert(processEntities);
     }
 
@@ -53,19 +59,24 @@ public class ProcessServiceImpl implements ProcessService {
         ProcessEntity processEntity = processRepository.findById(id)
                 .orElseThrow(() -> new ProcessNotFoundException(id));
 
+        if(processEntity.isDeleted()){
+            return null;
+        }
+
         return ProcessConverter.convert(processEntity);
     }
 
     @Override
-    public ProcessDto updateProcess(int id, ProcessEntity processEntityDetails) throws ProcessNotFoundException {
+    public ProcessDto updateProcess(int id, UpdateProcessRequest updateProcessRequest) throws ProcessNotFoundException, UserNotFoundException {
         ProcessEntity processEntity = processRepository.findById(id)
                 .orElseThrow(() -> new ProcessNotFoundException(id));
 
-        processEntity.setProcessName(processEntityDetails.getProcessName());
-        processEntity.setStartDate(processEntityDetails.getStartDate());
-        processEntity.setEndDate(processEntityDetails.getEndDate());
-        processEntity.setStatus(processEntityDetails.getStatus());
-        //processEntity.setTask(processEntityDetails.getTask());
+        UserServiceImpl userService = new UserServiceImpl();
+        UserDto userDto = userService.getUserById(updateProcessRequest.getUserId());
+
+        UserEntity userEntity = UserEntityConverter.convert(userDto);
+
+        prepareProcessEntity(updateProcessRequest, processEntity, userEntity);
 
         ProcessEntity updatedProcessEntity = processRepository.save(processEntity);
 
@@ -73,11 +84,22 @@ public class ProcessServiceImpl implements ProcessService {
     }
 
     @Override
-    public void deleteProcess(int id) throws ProcessNotFoundException{
+    public ProcessDto deleteProcess(int id) throws ProcessNotFoundException{
         ProcessEntity processEntity = processRepository.findById(id)
                 .orElseThrow(() -> new ProcessNotFoundException(id));
 
-        processRepository.delete(processEntity);
+        List<TaskDto> taskDtos =  TaskConverter.convert(processEntity.getTaskEntities());
+
+        for(TaskDto taskDto: taskDtos){
+            taskDto.setDeleted(true);
+        }
+
+        processEntity.setDeleted(true);
+
+        ProcessEntity updatedProcessEntity = processRepository.save(processEntity);
+
+        return ProcessConverter.convert(updatedProcessEntity);
+
     }
 
     @Override
@@ -117,4 +139,17 @@ public class ProcessServiceImpl implements ProcessService {
             processEntity.setStatus(valueOf(ProcessStatus.DONE));
         }
     }
+
+    private void prepareProcessEntity(UpdateProcessRequest request, ProcessEntity processEntity, UserEntity userEntity) {
+        if(request.getProcessName() != null){
+            processEntity.setProcessName(request.getProcessName());
+        }
+        if(request.getUserId() != 0){
+            processEntity.setUserEntity(userEntity);
+        }
+        if(request.getProcessStatus() != null){
+            processEntity.setStatus(String.valueOf(request.getProcessStatus()));
+        }
+    }
+
 }

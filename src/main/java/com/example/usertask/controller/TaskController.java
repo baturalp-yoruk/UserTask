@@ -1,6 +1,7 @@
 package com.example.usertask.controller;
 
 import com.example.usertask.controller.request.CreateTaskRequest;
+import com.example.usertask.controller.request.UpdateTaskRequest;
 import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.dto.TaskDto;
 import com.example.usertask.model.entity.TaskEntity;
@@ -35,8 +36,8 @@ public class TaskController {
 
     @PutMapping("/tasks/{id}")
     public TaskDto updateTask(@PathVariable(value = "id") int id,
-                                 @Valid @RequestBody TaskEntity taskEntityDetails) throws TaskNotFoundException {
-        return taskService.updateTask(id, taskEntityDetails);
+                                 @Valid @RequestBody UpdateTaskRequest updateTaskRequest) throws TaskNotFoundException, UserNotFoundException {
+        return taskService.updateTask(id, updateTaskRequest);
 
     }
 

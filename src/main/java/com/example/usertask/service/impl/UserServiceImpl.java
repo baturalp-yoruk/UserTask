@@ -1,6 +1,7 @@
 package com.example.usertask.service.impl;
 
 import com.example.usertask.controller.request.CreateUserRequest;
+import com.example.usertask.controller.request.UpdateUserRequest;
 import com.example.usertask.model.converter.CreateUserRequestConverter;
 import com.example.usertask.model.converter.UserConverter;
 import com.example.usertask.model.dto.UserDto;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("userServiceImpl")
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
@@ -45,18 +46,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(int id, UserEntity userEntityDetails)  throws UserNotFoundException{
+    public UserDto updateUser(int id, UpdateUserRequest updateUserRequest)  throws UserNotFoundException{
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        userEntity.setUserName(userEntityDetails.getUserName());
-        userEntity.setPassword(userEntityDetails.getPassword());
-        userEntity.setRole(userEntityDetails.getRole());
-        //userEntity.setTaskEntities(userEntityDetails.getTaskEntities());
+        prepareUserEntity(updateUserRequest, userEntity);
+        UserEntity updatedUser = userRepository.save(userEntity);
 
-        UserEntity updateduser = userRepository.save(userEntity);
-
-        return UserConverter.convert(updateduser);
+        return UserConverter.convert(updatedUser);
     }
 
     @Override
@@ -65,5 +62,17 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userRepository.delete(userEntity);
+    }
+
+    private void prepareUserEntity(UpdateUserRequest request, UserEntity userEntity) {
+        if(request.getUserName() != null){
+            userEntity.setUserName(request.getUserName());
+        }
+        if(request.getRole() != null){
+            userEntity.setRole(request.getRole());
+        }
+        if(request.getPassword() != null){
+            userEntity.setPassword(request.getPassword());
+        }
     }
 }

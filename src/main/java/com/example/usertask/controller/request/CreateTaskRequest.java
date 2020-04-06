@@ -1,5 +1,7 @@
 package com.example.usertask.controller.request;
 
+import com.example.usertask.model.entity.UserEntity;
+
 import java.util.Date;
 
 public class CreateTaskRequest {
@@ -7,6 +9,9 @@ public class CreateTaskRequest {
     private Date startDate;
     private Date endDate;
     private String status;
+    private String description;
+    private boolean deleted;
+    private UserEntity userEntity;
 
     public String getTaskName() {
         return taskName;
@@ -38,5 +43,29 @@ public class CreateTaskRequest {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

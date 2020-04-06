@@ -10,6 +10,9 @@ public class CreateProcessRequestConverter {
         processEntity.setStartDate(request.getStartDate());
         processEntity.setEndDate(request.getEndDate());
         processEntity.setStatus(request.getStatus());
+        processEntity.setDeleted(request.isDeleted());
+        processEntity.setUserEntity(request.getUserEntity());
+        processEntity.setTaskEntities(request.getTaskEntities());
 
         return processEntity;
     }

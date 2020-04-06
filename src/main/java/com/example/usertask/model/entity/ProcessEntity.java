@@ -1,7 +1,9 @@
 package com.example.usertask.model.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "process")
@@ -29,10 +31,8 @@ public class ProcessEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-    /*@OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "processEntity",
-            orphanRemoval = true)
-    private List<TaskEntity> taskEntities = new ArrayList<>();*/
+    @OneToMany
+    private List<TaskEntity> taskEntities = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(updatable = false, insertable = false)
@@ -94,12 +94,19 @@ public class ProcessEntity {
         this.status = status;
     }
 
-    /*public List<TaskEntity> getTask(){
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public List<TaskEntity> getTaskEntities() {
         return taskEntities;
     }
 
-    public void setTask(List<TaskEntity> taskEntities){
+    public void setTaskEntities(List<TaskEntity> taskEntities) {
         this.taskEntities = taskEntities;
-    }*/
-
+    }
 }

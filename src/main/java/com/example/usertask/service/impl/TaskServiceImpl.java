@@ -1,24 +1,25 @@
 package com.example.usertask.service.impl;
 
 import com.example.usertask.controller.request.CreateTaskRequest;
+import com.example.usertask.controller.request.UpdateTaskRequest;
 import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.converter.CreateTaskRequestConverter;
 import com.example.usertask.model.converter.TaskConverter;
+import com.example.usertask.model.converter.UserEntityConverter;
 import com.example.usertask.model.dto.TaskDto;
+import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.TaskEntity;
 import com.example.usertask.exception.TaskNotFoundException;
 import com.example.usertask.model.entity.UserEntity;
-import com.example.usertask.model.enums.TaskStatus;
 import com.example.usertask.repositories.TaskRepository;
 import com.example.usertask.repositories.UserRepository;
 import com.example.usertask.service.TaskService;
-import org.omg.CORBA.TCKind;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("taskServiceImpl")
+@Service
 public class TaskServiceImpl implements TaskService {
 
     @Autowired
@@ -29,6 +30,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> taskList() {
         List<TaskEntity> taskEntities = taskRepository.findAll();
+
+        for(TaskEntity taskEntity: taskEntities){
+            if(taskEntity.isDeleted()) {
+                taskEntities.remove(taskEntity);
+            }
+        }
+        
         return TaskConverter.convert(taskEntities);
     }
 
@@ -42,20 +50,22 @@ public class TaskServiceImpl implements TaskService {
           TaskEntity taskEntity = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
+          if(taskEntity.isDeleted()){
+              return null;
+          }
+
           return TaskConverter.convert(taskEntity);
     }
 
     @Override
-    public TaskDto updateTask(int id, TaskEntity taskEntityDetails)  throws TaskNotFoundException {
+    public TaskDto updateTask(int id, UpdateTaskRequest updateTaskRequest) throws TaskNotFoundException, UserNotFoundException {
         TaskEntity taskEntity = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
-        taskEntity.setTaskName(taskEntityDetails.getTaskName());
-        taskEntity.setEndDate(taskEntityDetails.getEndDate());
-        taskEntity.setStartDate(taskEntityDetails.getStartDate());
-        taskEntity.setUserEntity(taskEntityDetails.getUserEntity());
-        taskEntity.setStatus((TaskStatus.DONE).toString());
-
+        UserServiceImpl userService = new UserServiceImpl();
+        UserDto userDto = userService.getUserById(updateTaskRequest.getUserId());
+        UserEntity userEntity = UserEntityConverter.convert(userDto);
+        prepareTaskEntity(updateTaskRequest, taskEntity, userEntity);
         TaskEntity updatedTask = taskRepository.save(taskEntity);
 
         return TaskConverter.convert(updatedTask);
@@ -77,12 +87,29 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(int id) throws TaskNotFoundException {
+    public TaskDto deleteTask(int id) throws TaskNotFoundException {
         TaskEntity taskEntity = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
-        taskRepository.delete(taskEntity);
+        taskEntity.setDeleted(true);
+        TaskEntity updatedTask = taskRepository.save(taskEntity);
+        return TaskConverter.convert(updatedTask);
     }
 
+    private void prepareTaskEntity(UpdateTaskRequest request, TaskEntity taskEntity, UserEntity userEntity) {
+
+        if(request.getUserId() != 0){
+            taskEntity.setUserEntity(userEntity);
+        }
+        if(request.getTaskName() != null){
+            taskEntity.setTaskName(request.getTaskName());
+        }
+        if(request.getTaskStatus() != null){
+            taskEntity.setStatus(String.valueOf(request.getTaskStatus()));
+        }
+        if(request.getDescription() != null){
+            taskEntity.setDescription(request.getDescription());
+        }
+    }
 
 }

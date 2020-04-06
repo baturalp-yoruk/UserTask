@@ -1,6 +1,7 @@
 package com.example.usertask.controller;
 
 import com.example.usertask.controller.request.CreateProcessRequest;
+import com.example.usertask.controller.request.UpdateProcessRequest;
 import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.dto.ProcessDto;
 import com.example.usertask.model.entity.ProcessEntity;
@@ -34,8 +35,8 @@ public class ProcessController {
 
     @PutMapping("/processes/{id}")
     public ProcessDto updateProcess(@PathVariable(value = "id") int id,
-                                         @Valid @RequestBody ProcessEntity processDetails) throws ProcessNotFoundException {
-        return processService.updateProcess(id, processDetails);
+                                         @Valid @RequestBody UpdateProcessRequest updateProcessRequest) throws ProcessNotFoundException, UserNotFoundException {
+        return processService.updateProcess(id, updateProcessRequest);
     }
 
 

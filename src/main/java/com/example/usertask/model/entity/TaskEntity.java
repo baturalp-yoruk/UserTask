@@ -19,7 +19,7 @@ public class TaskEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "task_name" )
+    @Column(name = "task_name")
     private String taskName;
 
     @Column(name = "start_date")
@@ -31,6 +31,9 @@ public class TaskEntity {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "deleted")
     private boolean deleted;
 
@@ -38,9 +41,6 @@ public class TaskEntity {
     @JoinColumn(updatable = false, insertable = false)
     private UserEntity userEntity;
 
-    @ManyToOne
-    @JoinColumn(updatable = false, insertable = false)
-    private ProcessEntity processEntity;
 
     public TaskEntity(String taskName, Date startDate, Date endDate) {
         this.taskName = taskName;
@@ -62,14 +62,6 @@ public class TaskEntity {
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
-    }
-
-    public ProcessEntity getProcess() {
-        return processEntity;
-    }
-
-    public void setProcess(ProcessEntity processEntity) {
-        this.processEntity = processEntity;
     }
 
     public String getTaskName() {
@@ -102,6 +94,22 @@ public class TaskEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

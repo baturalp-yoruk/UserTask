@@ -1,6 +1,7 @@
 package com.example.usertask.controller;
 
 import com.example.usertask.controller.request.CreateUserRequest;
+import com.example.usertask.controller.request.UpdateUserRequest;
 import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.UserEntity;
 import com.example.usertask.exception.UserNotFoundException;
@@ -40,8 +41,8 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     public UserDto updateUser(@PathVariable(value = "id") int id,
-                                            @Validated UserEntity userEntityDetails) throws UserNotFoundException {
-        return userService.updateUser(id,userEntityDetails);
+                                            @Validated UpdateUserRequest updateUserRequest) throws UserNotFoundException {
+        return userService.updateUser(id,updateUserRequest);
     }
 
 
