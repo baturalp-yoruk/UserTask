@@ -17,10 +17,12 @@ import com.example.usertask.repositories.ProcessRepository;
 import com.example.usertask.repositories.TaskRepository;
 import com.example.usertask.repositories.UserRepository;
 import com.example.usertask.service.ProcessService;
+import com.example.usertask.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.valueOf;
 
@@ -32,15 +34,14 @@ public class ProcessServiceImpl implements ProcessService {
     private UserRepository userRepository;
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<ProcessDto> processList() {
-        List<ProcessEntity> processEntities = processRepository.findAll();
 
-        for(int i=0; i<processEntities.size(); i++){
-            if(processEntities.get(i).isDeleted())
-                processEntities.remove(i);
-        }
+        List<ProcessEntity> processEntities = processRepository.
+                findAll().stream().filter(processEntity -> !processEntity.isDeleted()) .collect(Collectors.toList());
 
         return ProcessConverter.convert(processEntities);
     }
@@ -71,7 +72,6 @@ public class ProcessServiceImpl implements ProcessService {
         ProcessEntity processEntity = processRepository.findById(id)
                 .orElseThrow(() -> new ProcessNotFoundException(id));
 
-        UserServiceImpl userService = new UserServiceImpl();
         UserDto userDto = userService.getUserById(updateProcessRequest.getUserId());
 
         UserEntity userEntity = UserEntityConverter.convert(userDto);

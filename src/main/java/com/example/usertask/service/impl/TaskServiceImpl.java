@@ -14,10 +14,12 @@ import com.example.usertask.model.entity.UserEntity;
 import com.example.usertask.repositories.TaskRepository;
 import com.example.usertask.repositories.UserRepository;
 import com.example.usertask.service.TaskService;
+import com.example.usertask.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -27,15 +29,14 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public List<TaskDto> taskList() {
-        List<TaskEntity> taskEntities = taskRepository.findAll();
 
-        for(TaskEntity taskEntity: taskEntities){
-            if(taskEntity.isDeleted()) {
-                taskEntities.remove(taskEntity);
-            }
-        }
+        List<TaskEntity> taskEntities = taskRepository.findAll()
+                .stream().filter(taskEntity -> !taskEntity.isDeleted()) .collect(Collectors.toList());
         
         return TaskConverter.convert(taskEntities);
     }
@@ -62,7 +63,6 @@ public class TaskServiceImpl implements TaskService {
         TaskEntity taskEntity = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
-        UserServiceImpl userService = new UserServiceImpl();
         UserDto userDto = userService.getUserById(updateTaskRequest.getUserId());
         UserEntity userEntity = UserEntityConverter.convert(userDto);
         prepareTaskEntity(updateTaskRequest, taskEntity, userEntity);

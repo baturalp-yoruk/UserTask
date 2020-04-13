@@ -1,5 +1,6 @@
 package com.example.usertask;
 
+import com.example.usertask.model.entity.MetricEntity;
 import com.example.usertask.model.entity.ProcessEntity;
 import com.example.usertask.model.entity.TaskEntity;
 import com.example.usertask.model.entity.UserEntity;
@@ -19,7 +20,8 @@ public class UserTaskApplication {
 		SessionFactory sessionFactory =(SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(UserEntity.class)
 				.addAnnotatedClass(TaskEntity.class)
-				.addAnnotatedClass(ProcessEntity.class).buildSessionFactory();
+				.addAnnotatedClass(ProcessEntity.class)
+				.addAnnotatedClass(MetricEntity.class).buildSessionFactory();
 		Session session = sessionFactory.getCurrentSession();
 
 		SpringApplication.run(UserTaskApplication.class, args);
