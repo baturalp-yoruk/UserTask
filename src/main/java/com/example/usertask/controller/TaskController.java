@@ -1,5 +1,6 @@
 package com.example.usertask.controller;
 
+import com.example.usertask.controller.request.CreateMetricRequest;
 import com.example.usertask.controller.request.CreateTaskRequest;
 import com.example.usertask.controller.request.UpdateTaskRequest;
 import com.example.usertask.exception.UserNotFoundException;
@@ -45,6 +46,11 @@ public class TaskController {
     public TaskDto assignTask(@PathVariable(value = "userid") int userid,@PathVariable(value = "taskid") int taskid) throws TaskNotFoundException, UserNotFoundException {
         return taskService.assignTask(userid,taskid);
 
+    }
+
+    @PutMapping("/tasks/assignMetric/{taskid}")
+    public TaskDto assignMetric(@PathVariable(value = "taskid") int taskid, CreateMetricRequest createMetricRequest) throws TaskNotFoundException{
+        return taskService.assignMetric(taskid, createMetricRequest);
     }
 
 

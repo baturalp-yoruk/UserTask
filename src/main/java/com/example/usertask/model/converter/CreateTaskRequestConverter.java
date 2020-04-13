@@ -13,6 +13,7 @@ public class CreateTaskRequestConverter {
         taskEntity.setDeleted(request.isDeleted());
         taskEntity.setUserEntity(request.getUserEntity());
         taskEntity.setDescription(request.getDescription());
+        taskEntity.setMetricEntities(request.getMetricEntities());
 
         return taskEntity;
     }

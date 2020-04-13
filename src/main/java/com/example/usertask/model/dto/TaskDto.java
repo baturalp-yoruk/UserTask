@@ -1,9 +1,11 @@
 package com.example.usertask.model.dto;
 
+import com.example.usertask.model.entity.MetricEntity;
 import com.example.usertask.model.entity.UserEntity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class TaskDto implements Serializable {
@@ -15,6 +17,7 @@ public class TaskDto implements Serializable {
     private String description;
     private boolean deleted;
     private UserEntity userEntity;
+    private List<MetricEntity> metricEntities;
 
 
     public int getTaskId() {
@@ -79,6 +82,14 @@ public class TaskDto implements Serializable {
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
+    }
+
+    public List<MetricEntity> getMetricEntities() {
+        return metricEntities;
+    }
+
+    public void setMetricEntities(List<MetricEntity> metricEntities) {
+        this.metricEntities = metricEntities;
     }
 
     @Override

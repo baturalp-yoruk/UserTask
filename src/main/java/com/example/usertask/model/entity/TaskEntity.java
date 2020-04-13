@@ -3,7 +3,9 @@ package com.example.usertask.model.entity;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("JpaModelReferenceInspection")
 @Entity
@@ -41,6 +43,8 @@ public class TaskEntity {
     @JoinColumn(updatable = false, insertable = false)
     private UserEntity userEntity;
 
+    @OneToMany
+    private List<MetricEntity> metricEntities = new ArrayList<>();
 
     public TaskEntity(String taskName, Date startDate, Date endDate) {
         this.taskName = taskName;
@@ -110,6 +114,14 @@ public class TaskEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<MetricEntity> getMetricEntities() {
+        return metricEntities;
+    }
+
+    public void setMetricEntities(List<MetricEntity> metricEntities) {
+        this.metricEntities = metricEntities;
     }
 
     @Override
