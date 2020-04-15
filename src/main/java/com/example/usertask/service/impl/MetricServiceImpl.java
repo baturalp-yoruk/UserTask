@@ -27,7 +27,7 @@ public class MetricServiceImpl implements MetricService {
         TaskEntity taskEntity = taskRepository.findById(taskid).orElseThrow(() -> new TaskNotFoundException(taskid));
         MetricEntity metricEntity = metricRepository.findById(metricid).orElseThrow(() -> new MetricNotFoundException(metricid));
 
-        metricEntity.setTaskEntity(taskEntity);
+        metricEntity.setTaskId(taskEntity.getId());
 
         MetricEntity updatedMetric = metricRepository.save(metricEntity);
 

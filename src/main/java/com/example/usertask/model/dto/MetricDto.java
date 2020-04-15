@@ -4,23 +4,24 @@ import com.example.usertask.model.entity.TaskEntity;
 import com.example.usertask.model.enums.MetricType;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class MetricDto implements Serializable {
 
-    private int metricId;
+    private int id;
     private MetricType metricType;
-    private Date startDate;
-    private Date originalEndDate;
-    private Date actualEndDate;
-    private TaskEntity taskEntity;
+    private LocalDateTime startDate;
+    private LocalDateTime originalEndDate;
+    private LocalDateTime actualEndDate;
+    private int taskId;
 
-    public int getMetricId() {
-        return metricId;
+    public int getId() {
+        return id;
     }
 
-    public void setMetricId(int metricId) {
-        this.metricId = metricId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public MetricType getMetricType() {
@@ -31,47 +32,47 @@ public class MetricDto implements Serializable {
         this.metricType = metricType;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getOriginalEndDate() {
+    public LocalDateTime getOriginalEndDate() {
         return originalEndDate;
     }
 
-    public void setOriginalEndDate(Date originalEndDate) {
+    public void setOriginalEndDate(LocalDateTime originalEndDate) {
         this.originalEndDate = originalEndDate;
     }
 
-    public Date getActualEndDate() {
+    public LocalDateTime getActualEndDate() {
         return actualEndDate;
     }
 
-    public void setActualEndDate(Date actualEndDate) {
+    public void setActualEndDate(LocalDateTime actualEndDate) {
         this.actualEndDate = actualEndDate;
     }
 
-    public TaskEntity getTaskEntity() {
-        return taskEntity;
+    public int getTaskId() {
+        return taskId;
     }
 
-    public void setTaskEntity(TaskEntity taskEntity) {
-        this.taskEntity = taskEntity;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     @Override
     public String toString() {
         return "MetricDto{" +
-                "metricId=" + metricId +
+                "id=" + id +
                 ", metricType=" + metricType +
                 ", startDate=" + startDate +
                 ", originalEndDate=" + originalEndDate +
                 ", actualEndDate=" + actualEndDate +
-                ", taskEntity=" + taskEntity +
+                ", taskId=" + taskId +
                 '}';
     }
 }

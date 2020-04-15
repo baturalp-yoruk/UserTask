@@ -4,10 +4,8 @@ import com.example.usertask.controller.request.CreateMetricRequest;
 import com.example.usertask.controller.request.CreateTaskRequest;
 import com.example.usertask.controller.request.UpdateTaskRequest;
 import com.example.usertask.exception.UserNotFoundException;
-import com.example.usertask.model.converter.CreateMetricRequestConverter;
-import com.example.usertask.model.converter.CreateTaskRequestConverter;
-import com.example.usertask.model.converter.TaskConverter;
-import com.example.usertask.model.converter.UserEntityConverter;
+import com.example.usertask.model.converter.*;
+import com.example.usertask.model.dto.MetricDto;
 import com.example.usertask.model.dto.TaskDto;
 import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.MetricEntity;
@@ -106,7 +104,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto assignMetric(int taskid, CreateMetricRequest createMetricRequest) throws TaskNotFoundException {
         TaskEntity taskEntity = taskRepository.findById(taskid).orElseThrow(() -> new TaskNotFoundException(taskid));
 
-        List<MetricEntity> metricEntities = Collections.singletonList(CreateMetricRequestConverter.convert(createMetricRequest));
+        List<MetricEntity> metricEntities = MetricEntityConverter.convert(createMetricRequest.getMetrics());
         metricRepository.saveAll(metricEntities);
 
         taskEntity.setMetricEntities(metricEntities);

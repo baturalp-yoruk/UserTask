@@ -11,11 +11,11 @@ public class MetricConverter {
     public static MetricDto convert(MetricEntity metricEntity){
         MetricDto metricDto = new MetricDto();
 
-        metricDto.setMetricId(metricEntity.getId());
+        metricDto.setId(metricEntity.getId());
         metricDto.setStartDate(metricEntity.getStartDate());
         metricDto.setOriginalEndDate(metricEntity.getOriginalEndDate());
         metricDto.setActualEndDate(metricEntity.getActualEndDate());
-        metricDto.setTaskEntity(metricEntity.getTaskEntity());
+        metricDto.setTaskId(metricEntity.getTaskId());
 
         return metricDto;
     }

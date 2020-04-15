@@ -1,55 +1,26 @@
 package com.example.usertask.controller.request;
 
-import com.example.usertask.model.entity.TaskEntity;
-import com.example.usertask.model.enums.MetricType;
-
-import java.util.Date;
+import com.example.usertask.model.dto.MetricDto;
+import java.util.List;
 
 public class CreateMetricRequest {
 
-    private MetricType metricType;
-    private Date startDate;
-    private Date originalEndDate;
-    private Date actualEndDate;
-    private TaskEntity taskEntity;
+    private List<MetricDto> metrics;
+    private int taskId;
 
-    public MetricType getMetricType() {
-        return metricType;
+    public List<MetricDto> getMetrics() {
+        return metrics;
     }
 
-    public void setMetricType(MetricType metricType) {
-        this.metricType = metricType;
+    public void setMetrics(List<MetricDto> metrics) {
+        this.metrics = metrics;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public int getTaskId() {
+        return taskId;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getOriginalEndDate() {
-        return originalEndDate;
-    }
-
-    public void setOriginalEndDate(Date originalEndDate) {
-        this.originalEndDate = originalEndDate;
-    }
-
-    public Date getActualEndDate() {
-        return actualEndDate;
-    }
-
-    public void setActualEndDate(Date actualEndDate) {
-        this.actualEndDate = actualEndDate;
-    }
-
-    public TaskEntity getTaskEntity() {
-        return taskEntity;
-    }
-
-    public void setTaskEntity(TaskEntity taskEntity) {
-        this.taskEntity = taskEntity;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 }
