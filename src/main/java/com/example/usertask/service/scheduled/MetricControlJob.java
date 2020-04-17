@@ -24,7 +24,7 @@ public class MetricControlJob {
     @Autowired
     private TaskRepository taskRepository;
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedRate = 5000)
     public void control() throws TaskNotFoundException {
 
         for (MetricEntity metricEntity : metricRepository.findAll()){

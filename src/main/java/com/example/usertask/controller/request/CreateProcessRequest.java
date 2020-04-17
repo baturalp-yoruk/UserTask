@@ -1,5 +1,7 @@
 package com.example.usertask.controller.request;
 
+import com.example.usertask.model.dto.TaskDto;
+import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.TaskEntity;
 import com.example.usertask.model.entity.UserEntity;
 
@@ -14,9 +16,9 @@ public class CreateProcessRequest {
     private String status;
     private int userId;
     private int taskId;
-    private List<TaskEntity> taskEntities;
+    private List<TaskDto> taskDtos;
     private boolean deleted;
-    private UserEntity userEntity;
+    private UserDto userDto;
 
 
 
@@ -76,19 +78,19 @@ public class CreateProcessRequest {
         this.deleted = deleted;
     }
 
-    public List<TaskEntity> getTaskEntities() {
-        return taskEntities;
+    public List<TaskDto> getTaskDtos() {
+        return taskDtos;
     }
 
-    public void setTaskEntities(List<TaskEntity> taskEntities) {
-        this.taskEntities = taskEntities;
+    public void setTaskDtos(List<TaskDto> taskDtos) {
+        this.taskDtos = taskDtos;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public UserDto getUserDto() {
+        return userDto;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
     }
 }

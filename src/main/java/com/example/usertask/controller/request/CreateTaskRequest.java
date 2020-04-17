@@ -1,5 +1,7 @@
 package com.example.usertask.controller.request;
 
+import com.example.usertask.model.dto.MetricDto;
+import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.MetricEntity;
 import com.example.usertask.model.entity.UserEntity;
 
@@ -13,8 +15,8 @@ public class CreateTaskRequest {
     private String status;
     private String description;
     private boolean deleted;
-    private UserEntity userEntity;
-    private List<MetricEntity> metricEntities;
+    private UserDto userDto;
+    private List<MetricDto> metricDtos;
 
     public String getTaskName() {
         return taskName;
@@ -64,19 +66,19 @@ public class CreateTaskRequest {
         this.deleted = deleted;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public UserDto getUserDto() {
+        return userDto;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
     }
 
-    public List<MetricEntity> getMetricEntities() {
-        return metricEntities;
+    public List<MetricDto> getMetricDtos() {
+        return metricDtos;
     }
 
-    public void setMetricEntities(List<MetricEntity> metricEntities) {
-        this.metricEntities = metricEntities;
+    public void setMetricDtos(List<MetricDto> metricDtos) {
+        this.metricDtos = metricDtos;
     }
 }
