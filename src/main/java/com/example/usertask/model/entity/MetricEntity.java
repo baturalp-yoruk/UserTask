@@ -28,7 +28,7 @@ public class MetricEntity {
     @Column(name = "actual_end_date")
     private LocalDateTime actualEndDate;
 
-    @Column(name = "task_id")
+    @JoinColumn(updatable = false, insertable = false)
     private int taskId;
 
     public int getId() {

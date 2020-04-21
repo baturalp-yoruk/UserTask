@@ -5,7 +5,6 @@ import com.example.usertask.controller.request.CreateTaskRequest;
 import com.example.usertask.controller.request.UpdateTaskRequest;
 import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.converter.*;
-import com.example.usertask.model.dto.MetricDto;
 import com.example.usertask.model.dto.TaskDto;
 import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.MetricEntity;
@@ -20,8 +19,9 @@ import com.example.usertask.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -113,6 +113,16 @@ public class TaskServiceImpl implements TaskService {
 
         return TaskConverter.convert(updatedTask);
 
+    }
+
+    @Override
+    public List<TaskEntity> findTaskList(List<Integer> taskIdList) throws TaskNotFoundException {
+        List<TaskEntity> taskEntities = new ArrayList<>();
+
+        for(Integer id: taskIdList){
+            taskEntities.add(taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id)));
+        }
+        return taskEntities;
     }
 
     private void prepareTaskEntity(UpdateTaskRequest request, TaskEntity taskEntity, UserEntity userEntity) {

@@ -12,24 +12,21 @@ import com.example.usertask.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
-
-    /*@Override
-    public List<UserEntity> userList() {
-        return userRepository.findAll();
-    }*/
 
     @Override
     public List<UserDto> userList() {
         List<UserEntity> userEntities = userRepository.findAll();
         return UserConverter.convert(userEntities);
     }
-
 
     @Override
     public void createUser(CreateUserRequest request) {
@@ -62,6 +59,20 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         userRepository.delete(userEntity);
+    }
+
+    @Override
+    public List<UserDto> getUserNameByName(String username){
+        if(username.length()<3){
+            return Collections.emptyList();
+        }
+        else{
+            List<UserDto> searchResults = userRepository.findAllByUserName(username);
+            return searchResults;
+        }
+    }
+    private List<String> getUserNameListFromUserEntityList(List<UserEntity> searchResultUserEntityList){
+        return searchResultUserEntityList.stream().map(user -> user.getUserName()).collect(Collectors.toList());
     }
 
     private void prepareUserEntity(UpdateUserRequest request, UserEntity userEntity) {

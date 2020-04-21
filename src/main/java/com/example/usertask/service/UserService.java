@@ -17,4 +17,5 @@ public interface UserService {
     UserDto getUserById(int id) throws UserNotFoundException;
     UserDto updateUser(int id, UpdateUserRequest updateUserRequest) throws UserNotFoundException;
     void deleteUser(int id) throws UserNotFoundException;
+    List<UserDto> getUserNameByName(String username);
 }
