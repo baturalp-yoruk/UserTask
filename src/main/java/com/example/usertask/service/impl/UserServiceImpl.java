@@ -3,24 +3,37 @@ package com.example.usertask.service.impl;
 import com.example.usertask.controller.request.CreateUserRequest;
 import com.example.usertask.controller.request.UpdateUserRequest;
 import com.example.usertask.model.converter.CreateUserRequestConverter;
+import com.example.usertask.model.converter.MetricConverter;
+import com.example.usertask.model.converter.TaskConverter;
 import com.example.usertask.model.converter.UserConverter;
+import com.example.usertask.model.dto.MetricDto;
+import com.example.usertask.model.dto.TaskDto;
 import com.example.usertask.model.dto.UserDto;
+import com.example.usertask.model.entity.TaskEntity;
 import com.example.usertask.model.entity.UserEntity;
 import com.example.usertask.exception.UserNotFoundException;
+import com.example.usertask.repositories.TaskRepository;
 import com.example.usertask.repositories.UserRepository;
 import com.example.usertask.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final int FIRST_3_CHARACTER = 3;
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Override
     public List<UserDto> userList() {
@@ -63,16 +76,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getUserNameByName(String username){
-        if(username.length()<3){
+        if(username.length()<FIRST_3_CHARACTER)
             return Collections.emptyList();
-        }
-        else{
-            List<UserDto> searchResults = userRepository.findAllByUserName(username);
-            return searchResults;
-        }
+        return UserConverter.convert(userRepository.findAllByUserName(username));
     }
-    private List<String> getUserNameListFromUserEntityList(List<UserEntity> searchResultUserEntityList){
-        return searchResultUserEntityList.stream().map(user -> user.getUserName()).collect(Collectors.toList());
+
+    @Override
+    public Map<TaskDto, List<MetricDto>> getTasksMetrics(int userId){
+        if(!userRepository.findById(userId).isPresent()){
+            return Collections.emptyMap();
+        }
+        List<TaskEntity> taskEntityList = taskRepository.findAll()
+                .stream().filter(taskEntity -> taskEntity.getUserEntity().getId()==userId).collect(Collectors.toList());
+
+        Map<TaskDto, List<MetricDto>> taskMetricMap = new HashMap<>();
+        for(TaskEntity taskEntity: taskEntityList){
+            taskMetricMap.put(TaskConverter.convert(taskEntity), MetricConverter.convert(taskEntity.getMetricEntities()));
+        }
+        return taskMetricMap;
     }
 
     private void prepareUserEntity(UpdateUserRequest request, UserEntity userEntity) {

@@ -23,11 +23,6 @@ public class UserEntity {
     @Column(name = "role_name" )
     private String role;
 
-    /*@OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "userEntity",
-            orphanRemoval = true)
-    private List<TaskEntity> taskEntities = new ArrayList<TaskEntity>();*/
-
     public UserEntity(String userName, String password, String role) {
         this.userName = userName;
         this.password = password;
