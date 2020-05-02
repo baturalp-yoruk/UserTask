@@ -18,7 +18,6 @@ import com.example.usertask.repositories.TaskRepository;
 import com.example.usertask.repositories.UserRepository;
 import com.example.usertask.service.ProcessService;
 import com.example.usertask.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,14 +27,19 @@ import static java.lang.String.valueOf;
 
 @Service
 public class ProcessServiceImpl implements ProcessService {
-    @Autowired
-    private ProcessRepository processRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private UserService userService;
+
+    private final ProcessRepository processRepository;
+    private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
+    private final UserService userService;
+
+    public ProcessServiceImpl(ProcessRepository processRepository, UserRepository userRepository,
+                              TaskRepository taskRepository, UserService userService) {
+        this.processRepository = processRepository;
+        this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
+        this.userService = userService;
+    }
 
     @Override
     public List<ProcessDto> processList() {
@@ -129,27 +133,26 @@ public class ProcessServiceImpl implements ProcessService {
         int count2 = 0;
 
         for(TaskDto taskDto: taskDtoList){
-            if(taskDto.getStatus().equals(TaskStatus.DONE)){
+            if(taskDto.getStatus().equals(TaskStatus.DONE))
                 count2++;
-            }
             count1++;
         }
 
-        if(count1 == count2){
+        if(count1 == count2)
             processEntity.setStatus(valueOf(ProcessStatus.DONE));
-        }
+
     }
 
     private void prepareProcessEntity(UpdateProcessRequest request, ProcessEntity processEntity, UserEntity userEntity) {
-        if(request.getProcessName() != null){
+        if(request.getProcessName() != null)
             processEntity.setProcessName(request.getProcessName());
-        }
-        if(request.getUserId() != 0){
+
+        if(request.getUserId() != 0)
             processEntity.setUserEntity(userEntity);
-        }
-        if(request.getProcessStatus() != null){
+
+        if(request.getProcessStatus() != null)
             processEntity.setStatus(String.valueOf(request.getProcessStatus()));
-        }
+
     }
 
 }

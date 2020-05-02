@@ -15,7 +15,6 @@ import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.repositories.TaskRepository;
 import com.example.usertask.repositories.UserRepository;
 import com.example.usertask.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -29,11 +28,13 @@ public class UserServiceImpl implements UserService {
 
     private final int FIRST_3_CHARACTER = 3;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
 
-    @Autowired
-    private TaskRepository taskRepository;
+    public UserServiceImpl(UserRepository userRepository, TaskRepository taskRepository) {
+        this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
+    }
 
     @Override
     public List<UserDto> userList() {

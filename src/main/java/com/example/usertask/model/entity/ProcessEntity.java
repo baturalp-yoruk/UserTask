@@ -34,7 +34,7 @@ public class ProcessEntity {
     @OneToMany
     private List<TaskEntity> taskEntities = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, insertable = false)
     private UserEntity userEntity;
 

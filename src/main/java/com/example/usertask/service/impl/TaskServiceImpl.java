@@ -16,7 +16,6 @@ import com.example.usertask.repositories.TaskRepository;
 import com.example.usertask.repositories.UserRepository;
 import com.example.usertask.service.TaskService;
 import com.example.usertask.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,14 +25,18 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private MetricRepository metricRepository;
+    private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final MetricRepository metricRepository;
+
+    public TaskServiceImpl(TaskRepository taskRepository, UserRepository userRepository,
+                           UserService userService, MetricRepository metricRepository) {
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.metricRepository = metricRepository;
+    }
 
     @Override
     public List<TaskDto> taskList() {

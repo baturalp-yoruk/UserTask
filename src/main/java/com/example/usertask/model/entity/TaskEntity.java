@@ -39,7 +39,7 @@ public class TaskEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, insertable = false)
     private UserEntity userEntity;
 

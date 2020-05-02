@@ -17,14 +17,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class UserTaskApplication {
 
 	public static void main(String[] args) {
-
-		SessionFactory sessionFactory =(SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(UserEntity.class)
-				.addAnnotatedClass(TaskEntity.class)
-				.addAnnotatedClass(ProcessEntity.class)
-				.addAnnotatedClass(MetricEntity.class).buildSessionFactory();
-		Session session = sessionFactory.getCurrentSession();
-
 		SpringApplication.run(UserTaskApplication.class, args);
 	}
 
