@@ -38,11 +38,11 @@ public class TaskEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(updatable = true, insertable = true)
     private UserEntity userEntity;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<MetricEntity> metricEntities = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)

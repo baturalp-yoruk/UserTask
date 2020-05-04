@@ -28,11 +28,11 @@ public class MetricEntity {
     @Column(name = "actual_end_date")
     private LocalDateTime actualEndDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(updatable = true, insertable = true)
     private TaskEntity taskEntity;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(updatable = true, insertable = true)
     private UserEntity userEntity;
 

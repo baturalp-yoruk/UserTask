@@ -25,7 +25,7 @@ public class UserEntity {
     @Column(name = "role_name" )
     private String role;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<TaskEntity> taskEntities = new ArrayList<>();
 
     public UserEntity(String userName, String password, String role) {

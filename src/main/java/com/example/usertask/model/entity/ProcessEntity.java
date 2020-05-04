@@ -31,10 +31,10 @@ public class ProcessEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<TaskEntity> taskEntities = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(updatable = true, insertable = true)
     private UserEntity userEntity;
 
