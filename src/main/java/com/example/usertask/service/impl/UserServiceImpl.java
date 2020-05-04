@@ -85,7 +85,6 @@ public class UserServiceImpl implements UserService {
         if(!userRepository.findById(userId).isPresent()){
             return Collections.emptyMap();
         }
-        //TODO: Check whether it works
         List<TaskEntity> taskEntityList = taskRepository.findAll()
                 .stream().filter(taskEntity -> taskEntity.getUserEntity().getId()==userId).collect(Collectors.toList());
 
