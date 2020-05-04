@@ -15,6 +15,7 @@ public class MetricDto implements Serializable {
     private LocalDateTime originalEndDate;
     private LocalDateTime actualEndDate;
     private int taskId;
+    private int userId;
 
     public int getId() {
         return id;
@@ -62,6 +63,14 @@ public class MetricDto implements Serializable {
 
     public void setTaskId(int taskId) {
         this.taskId = taskId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override

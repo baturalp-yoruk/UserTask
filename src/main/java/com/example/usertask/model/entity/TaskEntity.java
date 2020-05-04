@@ -16,7 +16,6 @@ public class TaskEntity {
 
     }
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -40,11 +39,15 @@ public class TaskEntity {
     private boolean deleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(updatable = false, insertable = false)
+    @JoinColumn(updatable = true, insertable = true)
     private UserEntity userEntity;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<MetricEntity> metricEntities = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = false, insertable = false)
+    private ProcessEntity processEntity;
 
     public TaskEntity(String taskName, Date startDate, Date endDate) {
         this.taskName = taskName;
@@ -122,6 +125,14 @@ public class TaskEntity {
 
     public void setMetricEntities(List<MetricEntity> metricEntities) {
         this.metricEntities = metricEntities;
+    }
+
+    public ProcessEntity getProcessEntity() {
+        return processEntity;
+    }
+
+    public void setProcessEntity(ProcessEntity processEntity) {
+        this.processEntity = processEntity;
     }
 
     @Override

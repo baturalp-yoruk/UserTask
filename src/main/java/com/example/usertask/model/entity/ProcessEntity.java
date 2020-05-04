@@ -31,11 +31,11 @@ public class ProcessEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<TaskEntity> taskEntities = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(updatable = false, insertable = false)
+    @JoinColumn(updatable = true, insertable = true)
     private UserEntity userEntity;
 
     public UserEntity getUserEntity() {

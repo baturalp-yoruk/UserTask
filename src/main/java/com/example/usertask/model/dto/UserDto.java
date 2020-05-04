@@ -1,6 +1,7 @@
 package com.example.usertask.model.dto;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -9,6 +10,7 @@ public class UserDto implements Serializable {
     private String password;
     private String role;
     private int userId;
+    private List<TaskDto> taskDtoList;
 
     public int getUserId() {
         return userId;
@@ -41,6 +43,14 @@ public class UserDto implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<TaskDto> getTaskDtoList() {
+        return taskDtoList;
+    }
+
+    public void setTaskDtoList(List<TaskDto> taskDtoList) {
+        this.taskDtoList = taskDtoList;
     }
 
     @Override

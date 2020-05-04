@@ -15,8 +15,11 @@ import java.util.List;
 
 @RestController
 public class ProcessController {
-    @Autowired
-    private ProcessService processService;
+    private final ProcessService processService;
+
+    public ProcessController(ProcessService processService) {
+        this.processService = processService;
+    }
 
     @GetMapping("/processes")
     public List<ProcessDto> processList(){
@@ -45,15 +48,15 @@ public class ProcessController {
         processService.deleteProcess(id);
     }
 
-    @PutMapping("/processes/{userid}/{processid}")
-    public ProcessDto assignProcess(@PathVariable(value = "userid") int userid, @PathVariable(value = "processid")
-            int processid) throws ProcessNotFoundException, UserNotFoundException {
-        return processService.assignProcess(userid,processid);
+    @PutMapping("/processes/{userId}/{processId}")
+    public ProcessDto assignProcess(@PathVariable(value = "userId") int userId, @PathVariable(value = "processId")
+            int processId) throws ProcessNotFoundException, UserNotFoundException {
+        return processService.assignProcess(userId,processId);
     }
 
-    @PutMapping("/processes/status/{processid}")
-    public void assignStatus(CreateProcessRequest request , @PathVariable(value = "processid") int processid) throws ProcessNotFoundException {
-        processService.assignStatus(request,processid);
+    @PutMapping("/processes/status/{processId}")
+    public void assignStatus(CreateProcessRequest request , @PathVariable(value = "processId") int processId) throws ProcessNotFoundException {
+        processService.assignStatus(request,processId);
     }
 
 }

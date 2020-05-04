@@ -17,6 +17,15 @@ public class CreateTaskRequest {
     private boolean deleted;
     private UserDto userDto;
     private List<MetricDto> metricDtos;
+    private String processName;
+
+    public String getProcessName() {
+        return processName;
+    }
+
+    public void setProcessName(String processName) {
+        this.processName = processName;
+    }
 
     public String getTaskName() {
         return taskName;

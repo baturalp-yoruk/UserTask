@@ -16,8 +16,8 @@ public class TaskDto implements Serializable {
     private String status;
     private String description;
     private boolean deleted;
-    private UserEntity userEntity;
-    private List<MetricEntity> metricEntities;
+    private int userId;
+    private List<MetricDto> metricDtoList;
 
 
     public int getTaskId() {
@@ -76,20 +76,20 @@ public class TaskDto implements Serializable {
         this.deleted = deleted;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public List<MetricEntity> getMetricEntities() {
-        return metricEntities;
+    public List<MetricDto> getMetricDtoList() {
+        return metricDtoList;
     }
 
-    public void setMetricEntities(List<MetricEntity> metricEntities) {
-        this.metricEntities = metricEntities;
+    public void setMetricDtoList(List<MetricDto> metricDtoList) {
+        this.metricDtoList = metricDtoList;
     }
 
     @Override

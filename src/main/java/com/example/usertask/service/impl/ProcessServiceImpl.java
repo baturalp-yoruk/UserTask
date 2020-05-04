@@ -43,11 +43,7 @@ public class ProcessServiceImpl implements ProcessService {
 
     @Override
     public List<ProcessDto> processList() {
-
-        List<ProcessEntity> processEntities = processRepository.
-                findAll().stream().filter(processEntity -> !processEntity.isDeleted()) .collect(Collectors.toList());
-
-        return ProcessConverter.convert(processEntities);
+        return ProcessConverter.convert(getNotDeletedProcessEntities());
     }
 
     @Override
@@ -64,11 +60,7 @@ public class ProcessServiceImpl implements ProcessService {
         ProcessEntity processEntity = processRepository.findById(id)
                 .orElseThrow(() -> new ProcessNotFoundException(id));
 
-        if(processEntity.isDeleted()){
-            return null;
-        }
-
-        return ProcessConverter.convert(processEntity);
+        return processEntity.isDeleted() ? null : ProcessConverter.convert(processEntity);
     }
 
     @Override
@@ -76,15 +68,14 @@ public class ProcessServiceImpl implements ProcessService {
         ProcessEntity processEntity = processRepository.findById(id)
                 .orElseThrow(() -> new ProcessNotFoundException(id));
 
+        //TODO: Check whether it works
         UserDto userDto = userService.getUserById(updateProcessRequest.getUserId());
 
         UserEntity userEntity = UserEntityConverter.convert(userDto);
 
         prepareProcessEntity(updateProcessRequest, processEntity, userEntity);
 
-        ProcessEntity updatedProcessEntity = processRepository.save(processEntity);
-
-        return ProcessConverter.convert(updatedProcessEntity);
+        return ProcessConverter.convert(processRepository.save(processEntity));
     }
 
     @Override
@@ -92,55 +83,51 @@ public class ProcessServiceImpl implements ProcessService {
         ProcessEntity processEntity = processRepository.findById(id)
                 .orElseThrow(() -> new ProcessNotFoundException(id));
 
-        List<TaskDto> taskDtos =  TaskConverter.convert(processEntity.getTaskEntities());
-
-        for(TaskDto taskDto: taskDtos){
-            taskDto.setDeleted(true);
-        }
-
+        List<TaskEntity> taskList = processEntity.getTaskEntities();
         processEntity.setDeleted(true);
+        taskList.stream().forEach(task -> task.setDeleted(true));
 
-        ProcessEntity updatedProcessEntity = processRepository.save(processEntity);
-
-        return ProcessConverter.convert(updatedProcessEntity);
+        return ProcessConverter.convert(processRepository.save(processEntity));
 
     }
 
     @Override
-    public ProcessDto assignProcess(int userid, int processid) throws UserNotFoundException, ProcessNotFoundException {
-        ProcessEntity processEntity = processRepository.findById(processid)
-                .orElseThrow(()-> new ProcessNotFoundException(processid));
+    public ProcessDto assignProcess(int userId, int processId) throws UserNotFoundException, ProcessNotFoundException {
+        ProcessEntity processEntity = processRepository.findById(processId)
+                .orElseThrow(()-> new ProcessNotFoundException(processId));
 
-        UserEntity userEntity = userRepository.findById(userid)
-                .orElseThrow(()-> new UserNotFoundException(userid));
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(()-> new UserNotFoundException(userId));
 
         processEntity.setUserEntity(userEntity);
 
-        ProcessEntity uodatedProcess = processRepository.save(processEntity);
-
-        return ProcessConverter.convert(uodatedProcess);
+        return ProcessConverter.convert(processRepository.save(processEntity));
     }
 
     @Override
-    public void assignStatus(CreateProcessRequest request , int processid) throws ProcessNotFoundException {
-        ProcessEntity processEntity = processRepository.findById(processid)
-                .orElseThrow(()-> new ProcessNotFoundException(processid));
+    public void assignStatus(CreateProcessRequest request , int processId) throws ProcessNotFoundException {
+        ProcessEntity processEntity = processRepository.findById(processId)
+                .orElseThrow(()-> new ProcessNotFoundException(processId));
 
         List<TaskEntity> taskEntities = taskRepository.findAllById(request.getTaskId());
         List<TaskDto> taskDtoList = TaskConverter.convert(taskEntities);
 
-        int count1 = 0;
-        int count2 = 0;
+        setStatus(processEntity, taskDtoList);
+
+    }
+
+    private void setStatus(ProcessEntity processEntity, List<TaskDto> taskDtoList) {
+        int taskCount = 0;
+        int completedTaskCount = 0;
 
         for(TaskDto taskDto: taskDtoList){
             if(taskDto.getStatus().equals(TaskStatus.DONE))
-                count2++;
-            count1++;
+                completedTaskCount++;
+            taskCount++;
         }
 
-        if(count1 == count2)
+        if(taskCount == completedTaskCount)
             processEntity.setStatus(valueOf(ProcessStatus.DONE));
-
     }
 
     private void prepareProcessEntity(UpdateProcessRequest request, ProcessEntity processEntity, UserEntity userEntity) {
@@ -152,7 +139,11 @@ public class ProcessServiceImpl implements ProcessService {
 
         if(request.getProcessStatus() != null)
             processEntity.setStatus(String.valueOf(request.getProcessStatus()));
+    }
 
+    private List<ProcessEntity> getNotDeletedProcessEntities() {
+        return processRepository.
+                findAll().stream().filter(processEntity -> !processEntity.isDeleted()) .collect(Collectors.toList());
     }
 
 }

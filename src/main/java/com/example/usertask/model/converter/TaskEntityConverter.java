@@ -1,12 +1,19 @@
 package com.example.usertask.model.converter;
 
+import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.dto.TaskDto;
+import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.TaskEntity;
+import com.example.usertask.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaskEntityConverter {
+
+    @Autowired
+    private static UserRepository userRepository;
 
     public static List<TaskEntity> convert(List<TaskDto> taskDtoList){
         return taskDtoList
@@ -23,9 +30,18 @@ public class TaskEntityConverter {
         taskEntity.setStatus(taskDto.getStatus());
         taskEntity.setId(taskDto.getTaskId());
         taskEntity.setDeleted(taskDto.isDeleted());
-        taskEntity.setUserEntity(taskDto.getUserEntity());
+        int id = taskDto.getUserId();
+        UserDto userDto = null;
+        try {
+            userDto = UserConverter.convert(userRepository.findById(id)
+                    .orElseThrow(()-> new UserNotFoundException(id)));
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
+        taskEntity.setUserEntity(UserEntityConverter.convert(userDto));
+
         taskEntity.setDescription(taskDto.getDescription());
-        taskEntity.setMetricEntities(taskDto.getMetricEntities());
+        taskEntity.setMetricEntities(MetricEntityConverter.convert(taskDto.getMetricDtoList()));
 
         return taskEntity;
     }

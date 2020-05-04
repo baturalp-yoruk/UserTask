@@ -15,7 +15,7 @@ public class MetricConverter {
         metricDto.setStartDate(metricEntity.getStartDate());
         metricDto.setOriginalEndDate(metricEntity.getOriginalEndDate());
         metricDto.setActualEndDate(metricEntity.getActualEndDate());
-        metricDto.setTaskId(metricEntity.getTaskId());
+        metricDto.setTaskId(metricEntity.getTaskEntity().getId());
 
         return metricDto;
     }

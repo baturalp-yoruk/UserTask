@@ -28,8 +28,13 @@ public class MetricEntity {
     @Column(name = "actual_end_date")
     private LocalDateTime actualEndDate;
 
-    @JoinColumn(updatable = false, insertable = false)
-    private int taskId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = true, insertable = true)
+    private TaskEntity taskEntity;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = true, insertable = true)
+    private UserEntity userEntity;
 
     public int getId() {
         return id;
@@ -71,12 +76,20 @@ public class MetricEntity {
         this.actualEndDate = actualEndDate;
     }
 
-    public int getTaskId() {
-        return taskId;
+    public TaskEntity getTaskEntity() {
+        return taskEntity;
     }
 
-    public void setTaskId(int taskId) {
-        this.taskId = taskId;
+    public void setTaskEntity(TaskEntity taskEntity) {
+        this.taskEntity = taskEntity;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     @Override
@@ -87,7 +100,6 @@ public class MetricEntity {
                 ", startDate=" + startDate +
                 ", originalEndDate=" + originalEndDate +
                 ", actualEndDate=" + actualEndDate +
-                ", taskId=" + taskId +
                 '}';
     }
 }

@@ -16,8 +16,11 @@ import java.util.List;
 
 @RestController
 public class TaskController {
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
+
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping("/tasks")
     public List<TaskDto> taskList(){
@@ -36,21 +39,19 @@ public class TaskController {
 
 
     @PutMapping("/tasks/{id}")
-    public TaskDto updateTask(@PathVariable(value = "id") int id,
-                                 @Valid @RequestBody UpdateTaskRequest updateTaskRequest) throws TaskNotFoundException, UserNotFoundException {
+    public TaskDto updateTask(@PathVariable(value = "id") int id, @Valid @RequestBody UpdateTaskRequest updateTaskRequest)
+            throws TaskNotFoundException, UserNotFoundException {
         return taskService.updateTask(id, updateTaskRequest);
-
     }
 
-    @PutMapping("/tasks/{userid}/{taskid}")
-    public TaskDto assignTask(@PathVariable(value = "userid") int userid,@PathVariable(value = "taskid") int taskid) throws TaskNotFoundException, UserNotFoundException {
-        return taskService.assignTask(userid,taskid);
-
+    @PutMapping("/tasks/{userId}/{taskId}")
+    public TaskDto assignTask(@PathVariable(value = "userId") int userId,@PathVariable(value = "taskId") int taskId) throws TaskNotFoundException, UserNotFoundException {
+        return taskService.assignTask(userId, taskId);
     }
 
-    @PutMapping("/tasks/assignMetric/{taskid}")
-    public TaskDto assignMetric(@PathVariable(value = "taskid") int taskid, CreateMetricRequest createMetricRequest) throws TaskNotFoundException{
-        return taskService.assignMetric(taskid, createMetricRequest);
+    @PutMapping("/tasks/assignMetric/{taskId}")
+    public TaskDto assignMetric(@PathVariable(value = "taskId") int taskId, CreateMetricRequest createMetricRequest) throws TaskNotFoundException{
+        return taskService.assignMetric(taskId, createMetricRequest);
     }
 
 

@@ -23,15 +23,13 @@ public class MetricServiceImpl implements MetricService {
     }
 
     @Override
-    public MetricDto assignTask(int taskid, int metricid) throws TaskNotFoundException, MetricNotFoundException {
-        TaskEntity taskEntity = taskRepository.findById(taskid).orElseThrow(() -> new TaskNotFoundException(taskid));
-        MetricEntity metricEntity = metricRepository.findById(metricid).orElseThrow(() -> new MetricNotFoundException(metricid));
+    public MetricDto assignTask(int taskId, int metricId) throws TaskNotFoundException, MetricNotFoundException {
+        TaskEntity taskEntity = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
+        MetricEntity metricEntity = metricRepository.findById(metricId).orElseThrow(() -> new MetricNotFoundException(metricId));
 
-        metricEntity.setTaskId(taskEntity.getId());
+        metricEntity.setTaskEntity(taskEntity);
 
-        MetricEntity updatedMetric = metricRepository.save(metricEntity);
-
-        return MetricConverter.convert(updatedMetric);
+        return MetricConverter.convert(metricRepository.save(metricEntity));
 
     }
 }

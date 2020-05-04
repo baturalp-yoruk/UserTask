@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MetricController {
 
-    @Autowired
-    private MetricService metricService;
+    private final MetricService metricService;
 
-    @PutMapping("/metrics/{taskid}/{metricid}")
-    public MetricDto assignTask(@PathVariable(value = "taskid") int taskid, @PathVariable(name = "metricid") int metricid) throws TaskNotFoundException, MetricNotFoundException{
-        return metricService.assignTask(taskid, metricid);
+    public MetricController(MetricService metricService) {
+        this.metricService = metricService;
+    }
+
+    @PutMapping("/metrics/{taskId}/{metricId}")
+    public MetricDto assignTask(@PathVariable(value = "taskId") int taskId, @PathVariable(name = "metricId") int metricId) throws TaskNotFoundException, MetricNotFoundException{
+        return metricService.assignTask(taskId, metricId);
     }
 
 

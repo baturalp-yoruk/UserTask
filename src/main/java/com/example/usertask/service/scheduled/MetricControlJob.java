@@ -73,8 +73,8 @@ public class MetricControlJob {
     }
 
     private UserDto getOverDueUser(TaskDto overDueTask) throws UserNotFoundException {
-        return UserConverter.convert(userRepository.findById(overDueTask.getUserEntity().getId()).
-                orElseThrow(() -> new UserNotFoundException(overDueTask.getUserEntity().getId())));
+        return UserConverter.convert(userRepository.findById(overDueTask.getUserId()).
+                orElseThrow(() -> new UserNotFoundException(overDueTask.getUserId())));
     }
 
     private void printOverDueMetrics(List<MetricDto> overDueMetricList){

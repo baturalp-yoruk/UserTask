@@ -15,8 +15,8 @@ public class ProcessDto implements Serializable {
     private Date endDate;
     private String status;
     private boolean deleted;
-    private List<TaskEntity> taskEntities;
-    private UserEntity userEntity;
+    private List<TaskDto> taskDtoList;
+    private int userId;
 
     public int getProcessId() {
         return processId;
@@ -66,20 +66,20 @@ public class ProcessDto implements Serializable {
         this.deleted = deleted;
     }
 
-    public List<TaskEntity> getTaskEntities() {
-        return taskEntities;
+    public List<TaskDto> getTaskDtoList() {
+        return taskDtoList;
     }
 
-    public void setTaskEntities(List<TaskEntity> taskEntities) {
-        this.taskEntities = taskEntities;
+    public void setTaskDtoList(List<TaskDto> taskDtoList) {
+        this.taskDtoList = taskDtoList;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override

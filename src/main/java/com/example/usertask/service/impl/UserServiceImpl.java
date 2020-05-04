@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> userList() {
-        List<UserEntity> userEntities = userRepository.findAll();
-        return UserConverter.convert(userEntities);
+        return UserConverter.convert(userRepository.findAll());
     }
 
     @Override
@@ -62,9 +61,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         prepareUserEntity(updateUserRequest, userEntity);
-        UserEntity updatedUser = userRepository.save(userEntity);
 
-        return UserConverter.convert(updatedUser);
+        return UserConverter.convert(userRepository.save(userEntity));
     }
 
     @Override
@@ -87,6 +85,7 @@ public class UserServiceImpl implements UserService {
         if(!userRepository.findById(userId).isPresent()){
             return Collections.emptyMap();
         }
+        //TODO: Check whether it works
         List<TaskEntity> taskEntityList = taskRepository.findAll()
                 .stream().filter(taskEntity -> taskEntity.getUserEntity().getId()==userId).collect(Collectors.toList());
 

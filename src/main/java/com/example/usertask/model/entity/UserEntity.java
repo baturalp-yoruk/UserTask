@@ -2,6 +2,8 @@ package com.example.usertask.model.entity;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -22,6 +24,9 @@ public class UserEntity {
 
     @Column(name = "role_name" )
     private String role;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<TaskEntity> taskEntities = new ArrayList<>();
 
     public UserEntity(String userName, String password, String role) {
         this.userName = userName;
@@ -61,13 +66,13 @@ public class UserEntity {
         this.role = role;
     }
 
-    /*public List<TaskEntity> getTaskEntities() {
+    public List<TaskEntity> getTaskEntities() {
         return taskEntities;
     }
 
     public void setTaskEntities(List<TaskEntity> taskEntities) {
         this.taskEntities = taskEntities;
-    }*/
+    }
 
     @Override
     public String toString() {
