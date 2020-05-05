@@ -1,8 +1,5 @@
 package com.example.usertask.model.dto;
 
-import com.example.usertask.model.entity.TaskEntity;
-import com.example.usertask.model.entity.UserEntity;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

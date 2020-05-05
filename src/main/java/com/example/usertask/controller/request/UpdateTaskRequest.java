@@ -1,6 +1,5 @@
 package com.example.usertask.controller.request;
 
-import com.example.usertask.model.enums.ProcessStatus;
 import com.example.usertask.model.enums.TaskStatus;
 
 public class UpdateTaskRequest {

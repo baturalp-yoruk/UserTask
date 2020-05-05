@@ -1,11 +1,9 @@
 package com.example.usertask.model.dto;
 
-import com.example.usertask.model.entity.TaskEntity;
 import com.example.usertask.model.enums.MetricType;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class MetricDto implements Serializable {
 

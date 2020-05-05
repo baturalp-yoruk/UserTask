@@ -1,14 +1,12 @@
 package com.example.usertask.controller;
 
-import com.example.usertask.controller.request.CreateMetricRequest;
 import com.example.usertask.controller.request.CreateTaskRequest;
 import com.example.usertask.controller.request.UpdateTaskRequest;
+import com.example.usertask.exception.MetricNotFoundException;
+import com.example.usertask.exception.TaskNotFoundException;
 import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.dto.TaskDto;
-import com.example.usertask.model.entity.TaskEntity;
-import com.example.usertask.exception.TaskNotFoundException;
 import com.example.usertask.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -44,14 +42,14 @@ public class TaskController {
         return taskService.updateTask(id, updateTaskRequest);
     }
 
-    @PutMapping("/tasks/{userId}/{taskId}")
-    public TaskDto assignTask(@PathVariable(value = "userId") int userId,@PathVariable(value = "taskId") int taskId) throws TaskNotFoundException, UserNotFoundException {
+    @PutMapping("/tasks/{taskId}/{userId}")
+    public TaskDto assignTask(@PathVariable(value = "taskId") int taskId,@PathVariable(value = "userId") int userId) throws TaskNotFoundException, UserNotFoundException {
         return taskService.assignTask(userId, taskId);
     }
 
-    @PutMapping("/tasks/assignMetric/{taskId}")
-    public TaskDto assignMetric(@PathVariable(value = "taskId") int taskId, CreateMetricRequest createMetricRequest) throws TaskNotFoundException{
-        return taskService.assignMetric(taskId, createMetricRequest);
+    @PutMapping("/tasks/assignMetric/{taskId}/{metricId}")
+    public TaskDto assignMetric(@PathVariable(value = "taskId") int taskId, @PathVariable(value = "metricId") int metricId) throws TaskNotFoundException, MetricNotFoundException {
+        return taskService.assignMetric(taskId, metricId);
     }
 
 

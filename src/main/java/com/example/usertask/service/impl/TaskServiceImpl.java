@@ -1,15 +1,16 @@
 package com.example.usertask.service.impl;
 
-import com.example.usertask.controller.request.CreateMetricRequest;
 import com.example.usertask.controller.request.CreateTaskRequest;
 import com.example.usertask.controller.request.UpdateTaskRequest;
+import com.example.usertask.exception.MetricNotFoundException;
+import com.example.usertask.exception.TaskNotFoundException;
 import com.example.usertask.exception.UserNotFoundException;
-import com.example.usertask.model.converter.*;
+import com.example.usertask.model.converter.CreateTaskRequestConverter;
+import com.example.usertask.model.converter.TaskConverter;
+import com.example.usertask.model.converter.UserEntityConverter;
 import com.example.usertask.model.dto.TaskDto;
-import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.MetricEntity;
 import com.example.usertask.model.entity.TaskEntity;
-import com.example.usertask.exception.TaskNotFoundException;
 import com.example.usertask.model.entity.UserEntity;
 import com.example.usertask.repositories.MetricRepository;
 import com.example.usertask.repositories.TaskRepository;
@@ -87,7 +88,19 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setDeleted(true);
         return TaskConverter.convert(taskRepository.save(taskEntity));
     }
+    @Override
+    public TaskDto assignMetric(int taskId, int metricId) throws TaskNotFoundException, MetricNotFoundException {
+        TaskEntity taskEntity = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
+        MetricEntity metricEntity = metricRepository.findById(metricId).orElseThrow(() -> new MetricNotFoundException(metricId));
 
+        List<MetricEntity> metricEntities = taskEntity.getMetricEntities();
+        metricEntities.add(metricEntity);
+        taskEntity.setMetricEntities(metricEntities);
+
+        return TaskConverter.convert(taskRepository.save(taskEntity));
+
+    }
+/*
     @Override
     public TaskDto assignMetric(int taskId, CreateMetricRequest createMetricRequest) throws TaskNotFoundException {
         TaskEntity taskEntity = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
@@ -102,7 +115,7 @@ public class TaskServiceImpl implements TaskService {
         return TaskConverter.convert(taskRepository.save(taskEntity));
 
     }
-
+*/
     @Override
     public List<TaskEntity> findTaskList(List<Integer> taskIdList) throws TaskNotFoundException {
         List<TaskEntity> taskEntities = new ArrayList<>();

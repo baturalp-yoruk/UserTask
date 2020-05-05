@@ -2,12 +2,11 @@ package com.example.usertask.controller;
 
 import com.example.usertask.controller.request.CreateUserRequest;
 import com.example.usertask.controller.request.UpdateUserRequest;
+import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.dto.MetricDto;
 import com.example.usertask.model.dto.TaskDto;
 import com.example.usertask.model.dto.UserDto;
-import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,11 @@ import java.util.Map;
 
 @RestController
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
     public List<UserDto> userList(){

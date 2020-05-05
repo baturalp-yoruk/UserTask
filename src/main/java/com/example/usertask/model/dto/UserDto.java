@@ -7,7 +7,6 @@ import java.util.Objects;
 
 public class UserDto implements Serializable {
     private String userName;
-    private String password;
     private String role;
     private int userId;
     private List<TaskDto> taskDtoList;
@@ -27,14 +26,6 @@ public class UserDto implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getRole() {
@@ -57,7 +48,6 @@ public class UserDto implements Serializable {
     public String toString() {
         return "UserDto{" +
                 "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }
@@ -68,12 +58,11 @@ public class UserDto implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         UserDto userDto = (UserDto) o;
         return Objects.equals(userName, userDto.userName) &&
-                Objects.equals(password, userDto.password) &&
                 Objects.equals(role, userDto.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName, password, role);
+        return Objects.hash(userName, role);
     }
 }

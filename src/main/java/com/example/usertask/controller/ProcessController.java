@@ -2,12 +2,10 @@ package com.example.usertask.controller;
 
 import com.example.usertask.controller.request.CreateProcessRequest;
 import com.example.usertask.controller.request.UpdateProcessRequest;
+import com.example.usertask.exception.ProcessNotFoundException;
 import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.dto.ProcessDto;
-import com.example.usertask.model.entity.ProcessEntity;
-import com.example.usertask.exception.ProcessNotFoundException;
 import com.example.usertask.service.ProcessService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,9 +46,9 @@ public class ProcessController {
         processService.deleteProcess(id);
     }
 
-    @PutMapping("/processes/{userId}/{processId}")
-    public ProcessDto assignProcess(@PathVariable(value = "userId") int userId, @PathVariable(value = "processId")
-            int processId) throws ProcessNotFoundException, UserNotFoundException {
+    @PutMapping("/processes/{processId}/{userId}")
+    public ProcessDto assignProcess(@PathVariable(value = "processId") int processId,
+                                    @PathVariable(value = "userId") int userId) throws ProcessNotFoundException, UserNotFoundException {
         return processService.assignProcess(userId,processId);
     }
 
