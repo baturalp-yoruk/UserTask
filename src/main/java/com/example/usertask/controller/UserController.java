@@ -10,6 +10,7 @@ import com.example.usertask.service.UserService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public void createUser(@RequestBody CreateUserRequest request) {
+    public void createUser(@Valid @RequestBody CreateUserRequest request) {
         userService.createUser(request);
     }
 
@@ -38,7 +39,7 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     public UserDto updateUser(@PathVariable(value = "id") int id,
-                                            @Validated UpdateUserRequest updateUserRequest) throws UserNotFoundException {
+                                            @Validated @RequestBody UpdateUserRequest updateUserRequest) throws UserNotFoundException {
         return userService.updateUser(id,updateUserRequest);
     }
 

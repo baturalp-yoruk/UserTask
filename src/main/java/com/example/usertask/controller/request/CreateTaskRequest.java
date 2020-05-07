@@ -8,15 +8,6 @@ public class CreateTaskRequest {
     private Date endDate;
     private String status;
     private String description;
-    private String processName;
-
-    public String getProcessName() {
-        return processName;
-    }
-
-    public void setProcessName(String processName) {
-        this.processName = processName;
-    }
 
     public String getTaskName() {
         return taskName;

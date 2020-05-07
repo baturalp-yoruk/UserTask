@@ -7,8 +7,6 @@ public class CreateProcessRequest {
     private Date startDate;
     private Date endDate;
     private String status;
-    private Iterable<Integer> taskId;
-    private int userId;
 
     public String getProcessName() {
         return processName;
@@ -42,19 +40,4 @@ public class CreateProcessRequest {
         this.status = status;
     }
 
-    public Iterable<Integer> getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(Iterable<Integer> taskId) {
-        this.taskId = taskId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 }

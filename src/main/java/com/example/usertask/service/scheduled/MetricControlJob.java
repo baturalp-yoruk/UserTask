@@ -8,25 +8,14 @@ import com.example.usertask.model.converter.UserConverter;
 import com.example.usertask.model.dto.MetricDto;
 import com.example.usertask.model.dto.TaskDto;
 import com.example.usertask.model.dto.UserDto;
-import com.example.usertask.model.entity.MetricEntity;
-import com.example.usertask.model.entity.TaskEntity;
 import com.example.usertask.repositories.MetricRepository;
 import com.example.usertask.repositories.TaskRepository;
 import com.example.usertask.repositories.UserRepository;
-import com.example.usertask.service.MetricService;
-import com.example.usertask.service.TaskService;
-import com.sun.xml.bind.v2.TODO;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -34,33 +23,46 @@ import java.util.stream.Collectors;
 @Component
 public class MetricControlJob {
 
-    @Autowired
-    private MetricRepository metricRepository;
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final MetricRepository metricRepository;
+    private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
+
+    private static boolean firstTime;
+    private static List<MetricDto> overDueMetricList;
+    private static int preventUnnecessaryPrint = 0;
 
     private final Supplier<Predicate<MetricDto>> findOverDueMetrics = () -> metricDto -> metricDto.getActualEndDate()
             .compareTo(metricDto.getOriginalEndDate()) > 0;
+
+    public MetricControlJob(MetricRepository metricRepository, TaskRepository taskRepository, UserRepository userRepository) {
+        this.metricRepository = metricRepository;
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+    }
 
     @Scheduled(fixedRate = 5000)
     public void control() throws TaskNotFoundException, UserNotFoundException {
         List<TaskDto> taskList = new ArrayList<>();
         List<UserDto> userList = new ArrayList<>();
         List<MetricDto> allMetrics = MetricConverter.convert(metricRepository.findAll());
-        List<MetricDto> overDueMetricList = getOverDueMetrics(allMetrics);
-
-        for(MetricDto overDueMetric: overDueMetricList){
-            TaskDto overDueTask = getOverDueTask(overDueMetric);
-            taskList.add(overDueTask);
-            userList.add(getOverDueUser(overDueTask));
+        if(overDueMetricList != null){
+            preventUnnecessaryPrint = overDueMetricList.size();
         }
+        overDueMetricList = getOverDueMetrics(allMetrics);
+        if(!firstTime && overDueMetricList.size()  > 0) {
+            firstTime = true;
+        }
+        if(firstTime && preventUnnecessaryPrint != overDueMetricList.size()){
+            for (MetricDto overDueMetric : overDueMetricList) {
+                TaskDto overDueTask = getOverDueTask(overDueMetric);
+                taskList.add(overDueTask);
+                userList.add(getOverDueUser(overDueTask));
+            }
 
-        printOverDueMetrics(overDueMetricList);
-        printOverDueTasks(taskList);
-        printOverDueUsers(userList);
-
+            printOverDueMetrics(overDueMetricList);
+            printOverDueTasks(taskList);
+            printOverDueUsers(userList);
+        }
     }
 
     private List<MetricDto> getOverDueMetrics(List<MetricDto> allMetrics) {

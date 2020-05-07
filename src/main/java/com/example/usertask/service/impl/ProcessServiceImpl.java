@@ -2,13 +2,16 @@ package com.example.usertask.service.impl;
 
 import com.example.usertask.controller.request.CreateProcessRequest;
 import com.example.usertask.controller.request.UpdateProcessRequest;
+import com.example.usertask.exception.ProcessNotFoundException;
 import com.example.usertask.exception.UserNotFoundException;
-import com.example.usertask.model.converter.*;
+import com.example.usertask.model.converter.CreateProcessRequestConverter;
+import com.example.usertask.model.converter.ProcessConverter;
+import com.example.usertask.model.converter.TaskConverter;
+import com.example.usertask.model.converter.UserEntityConverter;
 import com.example.usertask.model.dto.ProcessDto;
 import com.example.usertask.model.dto.TaskDto;
 import com.example.usertask.model.dto.UserDto;
 import com.example.usertask.model.entity.ProcessEntity;
-import com.example.usertask.exception.ProcessNotFoundException;
 import com.example.usertask.model.entity.TaskEntity;
 import com.example.usertask.model.entity.UserEntity;
 import com.example.usertask.model.enums.ProcessStatus;
@@ -47,11 +50,8 @@ public class ProcessServiceImpl implements ProcessService {
     }
 
     @Override
-    public void createProcess(CreateProcessRequest request) throws UserNotFoundException {
-        UserEntity userEntity = userRepository.findById(request.getUserId())
-                .orElseThrow(()->new UserNotFoundException(request.getUserId()));
+    public void createProcess(CreateProcessRequest request) {
         ProcessEntity processEntity = CreateProcessRequestConverter.convert(request);
-        processEntity.setUserEntity(userEntity);
         processRepository.save(processEntity);
     }
 
@@ -105,11 +105,11 @@ public class ProcessServiceImpl implements ProcessService {
     }
 
     @Override
-    public void assignStatus(CreateProcessRequest request , int processId) throws ProcessNotFoundException {
+    public void assignStatus(UpdateProcessRequest request , int processId) throws ProcessNotFoundException {
         ProcessEntity processEntity = processRepository.findById(processId)
                 .orElseThrow(()-> new ProcessNotFoundException(processId));
 
-        List<TaskEntity> taskEntities = taskRepository.findAllById(request.getTaskId());
+        List<TaskEntity> taskEntities = processEntity.getTaskEntities();
         List<TaskDto> taskDtoList = TaskConverter.convert(taskEntities);
 
         setStatus(processEntity, taskDtoList);
