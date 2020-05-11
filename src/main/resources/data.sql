@@ -19,3 +19,12 @@ insert into task (deleted, description, end_date,start_date, status, task_name, 
 
 insert into metric(actual_end_date, metric_type, original_end_date, start_date, task_entity_id, user_entity_id) values( '2020-05-07', 'BUGFIX',  '2020-05-10', '2020-03-01', 2, 1);
 insert into metric(actual_end_date, metric_type, original_end_date, start_date, task_entity_id, user_entity_id) values( '2020-06-07', 'BUGFIX',  '2020-05-10', '2020-03-01', 3, 6);
+
+insert into team(team_name, description) values ('backend', 'gg backend team');
+insert into team(team_name, description) values ('frontend', 'gg frontend team');
+
+insert into board(board_name, description) values ('plan', 'team plan board');
+insert into board(board_name, description) values ('empty', 'for other things');
+
+insert into column_entity(column_title) values ('TODO');
+insert into column_entity(column_title) values ('DONE');

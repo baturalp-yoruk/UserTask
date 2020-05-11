@@ -2,14 +2,12 @@ package com.example.usertask.service;
 
 import com.example.usertask.controller.request.CreateUserRequest;
 import com.example.usertask.controller.request.UpdateUserRequest;
+import com.example.usertask.exception.UserNotFoundException;
 import com.example.usertask.model.dto.MetricDto;
 import com.example.usertask.model.dto.TaskDto;
 import com.example.usertask.model.dto.UserDto;
-import com.example.usertask.model.entity.UserEntity;
-import com.example.usertask.exception.UserNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
